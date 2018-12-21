@@ -5,9 +5,15 @@ SHA1SUM	 := sha1sum
 version=4.7.11
 
 ALL		+= drupal
-drupal-URL1	:= http://mirror.onelab.eu/third-party/drupal-$(version).tar.gz
-drupal-URL2	:= http://ftp.drupal.org/files/projects/drupal-$(version).tar.gz
-drupal-SHA1SUM  := c9f767e6c2cd873c4b0bef1986e2821febfc7e34
+# for fedora29
+# this patch is about commenting off one line in settings.php:
+#this causes a php error in fedora29/php7.2
+#ini_set('session.save_handler',     'user'); 
+drupal-URL1	:= http://mirror.onelab.eu/third-party/drupal-$(version)-patch-php72.tar.gz
+drupal-URL2	:= $(drupal-URL1)
+drupal-SHA1SUM  := f99343938b418384859ff2ced0a0870824e73a13
+# so we can no longer use upstream that was here:
+#drupal-URL2	:= http://ftp.drupal.org/files/projects/drupal-$(version).tar.gz
 drupal		:= $(notdir $(drupal-URL1))
 
 ALL		+= taxo
