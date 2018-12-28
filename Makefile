@@ -4,23 +4,21 @@ SHA1SUM	 := sha1sum
 
 version=4.7.11
 
-ALL		+= drupal
+ALL				+= drupal
 # for fedora29
 # this patch is about commenting off one line in settings.php:
 #this causes a php error in fedora29/php7.2
-#ini_set('session.save_handler',     'user'); 
-drupal-URL1	:= http://mirror.onelab.eu/third-party/drupal-$(version)-patch-php72.tar.gz
-drupal-URL2	:= $(drupal-URL1)
+#ini_set('session.save_handler',     'user');
+drupal-URL1		:= http://mirror.onelab.eu/third-party/drupal-$(version)-patch-php72.tar.gz
 drupal-SHA1SUM  := f99343938b418384859ff2ced0a0870824e73a13
 # so we can no longer use upstream that was here:
 #drupal-URL2	:= http://ftp.drupal.org/files/projects/drupal-$(version).tar.gz
-drupal		:= $(notdir $(drupal-URL1))
+drupal			:= drupal-$(version).tar.gz
 
-ALL		+= taxo
-taxo-URL1	:= http://mirror.onelab.eu/third-party/taxonomy_block-4.7.x-1.x-dev.tar.gz
-taxo-URL2	:= http://build.planet-lab.org/third-party/taxonomy_block-4.7.x-1.x-dev.tar.gz
+ALL				+= taxo
+taxo-URL1		:= http://mirror.onelab.eu/third-party/taxonomy_block-4.7.x-1.x-dev.tar.gz
 taxo-SHA1SUM	:= 9d926df1695c0092a74446154b00579d4ccbcb60
-taxo		:= $(notdir $(taxo-URL1))
+taxo	  		:= $(notdir $(taxo-URL1))
 
 all: $(ALL)
 .PHONY: all
@@ -29,10 +27,8 @@ all: $(ALL)
 define download_target
 $(1): $($(1))
 .PHONY: $(1)
-$($(1)): 
-	@if [ ! -e "$($(1))" ] ; then \
-	{ echo Using primary; echo "$(WEBFETCH) $($(1)-URL1)" ; $(WEBFETCH) $($(1)-URL1) ; } || \
-	{ echo Using secondary; echo "$(WEBFETCH) $($(1)-URL2)" ; $(WEBFETCH) $($(1)-URL2) ; } ; fi
+$($(1)):
+	@if [ ! -e "$($(1))" ] ; then echo "$(WEBFETCH) $($(1)-URL1)" ; $(WEBFETCH) $($(1)-URL1) -o $($(1));  fi
 	@if [ ! -e "$($(1))" ] ; then echo "Could not download source file: $($(1)) does not exist" ; exit 1 ; fi
 	@if test "$$$$($(SHA1SUM) $($(1)) | awk '{print $$$$1}')" != "$($(1)-SHA1SUM)" ; then \
 	    echo "sha1sum of the downloaded $($(1)) does not match the one from 'Makefile'" ; \
@@ -47,7 +43,7 @@ endef
 $(eval $(call download_target,drupal))
 $(eval $(call download_target,taxo))
 
-sources: $(ALL) 
+sources: $(ALL)
 .PHONY: sources
 
 ####################
