@@ -1,5 +1,5 @@
 #
-WEBFETCH := curl -H Pragma: -O -R -S --fail --show-error
+WEBFETCH := curl -H Pragma: -R -S --fail --show-error
 SHA1SUM	 := sha1sum
 
 version=4.7.11
@@ -28,7 +28,7 @@ define download_target
 $(1): $($(1))
 .PHONY: $(1)
 $($(1)):
-	@if [ ! -e "$($(1))" ] ; then echo "$(WEBFETCH) $($(1)-URL1)" ; $(WEBFETCH) $($(1)-URL1) -o $($(1));  fi
+	@if [ ! -e "$($(1))" ] ; then $(WEBFETCH) $($(1)-URL1) -o $($(1));  fi
 	@if [ ! -e "$($(1))" ] ; then echo "Could not download source file: $($(1)) does not exist" ; exit 1 ; fi
 	@if test "$$$$($(SHA1SUM) $($(1)) | awk '{print $$$$1}')" != "$($(1)-SHA1SUM)" ; then \
 	    echo "sha1sum of the downloaded $($(1)) does not match the one from 'Makefile'" ; \
