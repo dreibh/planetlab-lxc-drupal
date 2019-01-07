@@ -4,7 +4,7 @@
 
 %define name drupal
 %define version 4.7
-%define taglevel 16
+%define taglevel 17
 %define minorversion 11
 
 %define release %{taglevel}%{?pldistro:.%{pldistro}}%{?date:.%{date}}
@@ -69,6 +69,9 @@ rm -rf %{buildroot}
 %dir %attr(775,root,apache) %{drupaldir}/files
 
 %changelog
+* Mon Jan 07 2019 Thierry <Parmentelat> - drupal-4.7-17
+- apply patch for php7.2 on fedora29
+
 * Tue Jan 19 2016 Thierry Parmentelat <thierry.parmentelat@sophia.inria.fr> - drupal-4.7-16
 - download at onelab first, as the upstream version mysteriously has a new hash
 
